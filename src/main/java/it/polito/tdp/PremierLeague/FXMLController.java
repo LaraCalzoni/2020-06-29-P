@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.PremierLeague.model.Adiacenza;
 import it.polito.tdp.PremierLeague.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,7 +41,7 @@ public class FXMLController {
     private TextField txtMinuti; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbMese"
-    private ComboBox<?> cmbMese; // Value injected by FXMLLoader
+    private ComboBox<Integer> cmbMese; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbM1"
     private ComboBox<?> cmbM1; // Value injected by FXMLLoader
@@ -53,10 +55,75 @@ public class FXMLController {
     @FXML
     void doConnessioneMassima(ActionEvent event) {
     	
+txtResult.clear();
+    	
+    	if(this.cmbMese.getValue()==null && this.txtMinuti.getText()=="") {
+    		txtResult.appendText("Selezionare i campi");
+    		return;
+    	}
+    	
+    	else if(this.cmbMese.getValue()==null) {
+    		txtResult.appendText("Selezionare un mese");
+    		return;
+    	}
+    	else if(this.txtMinuti.getText()==null) {
+    		txtResult.appendText("Inserire dei minuti");
+    		return;
+    	}
+    	
+    	int mese = this.cmbMese.getValue();
+    	int minuti=0;
+    	try {
+    		minuti = Integer.parseInt(this.txtMinuti.getText());
+    	}
+    	catch(NumberFormatException e) {
+    		txtResult.appendText("Inserire un numero!");
+    	}
+    	
+    	for( Adiacenza a : this.model.getMatchMigliori(mese, minuti)) {
+    		txtResult.appendText(a+"\n");
+    	}
+    	
+    	
+    	
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	txtResult.clear();
+    	
+    	if(this.cmbMese.getValue()==null && this.txtMinuti.getText()=="") {
+    		txtResult.appendText("Selezionare i campi");
+    		return;
+    	}
+    	
+    	else if(this.cmbMese.getValue()==null) {
+    		txtResult.appendText("Selezionare un mese");
+    		return;
+    	}
+    	else if(this.txtMinuti.getText()==null) {
+    		txtResult.appendText("Inserire dei minuti");
+    		return;
+    	}
+    	
+    	int mese = this.cmbMese.getValue();
+    	int minuti=0;
+    	try {
+    		minuti = Integer.parseInt(this.txtMinuti.getText());
+    	}
+    	catch(NumberFormatException e) {
+    		txtResult.appendText("Inserire un numero!");
+    	}
+    	
+    	
+    	this.model.creaGrafo(mese, minuti);
+    	
+    	txtResult.appendText("GRAFO CREATO!"+"\n");
+    	txtResult.appendText(this.model.nVertici()+" vertici"+"\n");
+    	txtResult.appendText(this.model.nArchi()+" archi");
+    	
+    	
+    	
     	
     }
 
@@ -79,7 +146,12 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
-  
+    	List <Integer> mesi= new ArrayList<>();
+    	for(int i = 1; i<=12; i++) {
+    		mesi.add(i);
+    	}
+    	
+    	this.cmbMese.getItems().addAll(mesi);
     }
     
     

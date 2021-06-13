@@ -29,6 +29,10 @@ public class Adiacenza {
 	public void setPeso(int peso) {
 		this.peso = peso;
 	}
+	@Override
+	public String toString() {
+		return this.m1 +" "+this.m2+" ( "+this.getPeso()+" )"+"\n";
+	}
 	
 	
 }
